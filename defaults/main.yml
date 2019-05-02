@@ -1,7 +1,7 @@
 ---
 scope: foo
 ec2_count: 2
-ec2_scope : {{ scope }}"
+ec2_scope : "{{ scope }}"
 ec2_delete: "{{ scope }}"
 ec2_groupid: ec2_groupid
 ec2_subnetid: ec2_subnetid 
