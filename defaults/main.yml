@@ -1,16 +1,16 @@
 ---
 scope: foo
-ec2_count: "{{ ec2_count }}"
-ec2_scope : "{{ scope }}"
+ec2_count: 2
+ec2_scope : {{ scope }}"
 ec2_delete: "{{ scope }}"
-ec2_groupid: ""
-ec2_subnetid: "{{ ec2_subnetid }}"
-ec2_lb_target: "{{ ec2_lb_target }}"
-ec2_region: "{{ ec2_region }}"
-ec2_vpc: "{{ ec2_vpc }}"
-ec2_size: "{{ ec2_size | default('t2_micro') }}"
-ec2_ami: "{{ ec2_ami }}"
-ec2_key_name: "{{ ec2_key_name }}"
+ec2_groupid: ec2_groupid
+ec2_subnetid: ec2_subnetid 
+ec2_lb_target: ec2_lb_target 
+ec2_region: ec2_region 
+ec2_vpc: ec2_vpc 
+ec2_size: t2_micro
+ec2_ami: ec2_ami
+ec2_key_name: ec2_key_name 
 ec2_assign_public_ip: false
 ec2_wait: true
 ec2_instance_tags:
