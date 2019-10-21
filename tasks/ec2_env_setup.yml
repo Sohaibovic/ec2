@@ -15,6 +15,7 @@
     state: present
     vpc_id: "{{ r_ec2_vpc_net.vpc.id }}"
     cidr: "{{ ec2_sub_cidr_prefix }}"
+    region: "{{ ec2_region }}"
     state: present
   register: r_ec2_subnet
 
