@@ -4,10 +4,33 @@
     name: "{{ ec2_vpc }}"
     cidr_block: "{{ ec2_vn_cidr_prefix }}"
     region: "{{ ec2_region }}"
+    state: present
   register: r_ec2_vpc_net
 
 - debug: 
-    var: r_ec2_vpc_net
+    var: r_ec2_vpc_net.vpc.id
 
+- name: Create a subnet "{{ ec2_subnet }}"
+  ec2_vpc_subnet:
+    state: present
+    vpc_id: "{{ r_ec2_vpc_net.vpc.id }}"
+    cidr: "{{ ec2_sub_cidr_prefix }}"
+    state: present
+  register: r_ec2_subnet
 
+- debug: 
+    var: r_ec2_subnet
 
+- name: Peer Lab VPC to "{{ ec2_vpc }}" 
+  ec2_vpc_peer:
+    region: "{{ ec2_region }}"
+    vpc_id: "{{ ec2_lab_vpc_id }}"
+    peer_vpc_id: "{{ r_ec2_vpc_net.vpc.id }}"
+    state: present
+  register: r_ec2_vpc_peer
+
+- name: Accept peering connection from remote account
+  ec2_vpc_peer:
+    region: "{{ ec2_region }}"
+    peering_id: "{{ r_ec2_vpc_peer.peering_id }}"
+    state: accept
