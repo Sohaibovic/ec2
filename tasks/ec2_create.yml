@@ -1,7 +1,7 @@
 ---
 - name: Read AWS infrastructure values from facts
   set_fact:
-    ec2_subnetid: "{{ hostvars.localhost.cat_facts.ec2_subnetid }}"
+    ec2_subnetid: "{{ hostvars.localhost.cat_facts.ec2_subnet_id }}"
 
 - name: Provision a set of EC2 instances with tag_Name {{ ec2_scope }}
   ec2:
