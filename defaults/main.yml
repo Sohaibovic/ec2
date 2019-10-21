@@ -11,17 +11,18 @@ ec2_size: t2_micro
 ec2_ami: ami-0e12cbde3e77cbb98
 ec2_vpc_cidr_prefix: "10.2.0.0/16"
 ec2_sub_cidr_prefix: "10.2.0.0/16" 
-ec2_vpc: "{{ customer }}_{{ ec2_env }}_vpc" 
 ec2_lab_vpc_id: vpc-0dfbc7ccf09d77192
-
-
-ec2_key_name: ec2_key_name 
+ec2_key_name: dcl-demo 
 ec2_assign_public_ip: false
 ec2_wait: true
 
 ec2_instance_tags:
   Name: "{{ scope }}"
 
-ec2_groupid: ec2_groupid
-ec2_subnetid: ec2_subnetid 
+ec2_vpc: "{{ customer }}_{{ ec2_env }}_vpc" 
+
+
 ec2_lb_target: ec2_lb_target 
+
+
+

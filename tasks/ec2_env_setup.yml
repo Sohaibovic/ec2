@@ -10,9 +10,8 @@
 - debug: 
     var: r_ec2_vpc_net.vpc.id
 
-- name: Create a subnet "{{ ec2_subnet }}"
+- name: Create a subnet
   ec2_vpc_subnet:
-    state: present
     vpc_id: "{{ r_ec2_vpc_net.vpc.id }}"
     cidr: "{{ ec2_sub_cidr_prefix }}"
     region: "{{ ec2_region }}"
@@ -20,7 +19,7 @@
   register: r_ec2_subnet
 
 - debug: 
-    var: r_ec2_subnet
+    var: r_ec2_subnet.subnet.id
 
 - name: Peer Lab VPC to "{{ ec2_vpc }}" 
   ec2_vpc_peer:
@@ -35,3 +34,18 @@
     region: "{{ ec2_region }}"
     peering_id: "{{ r_ec2_vpc_peer.peering_id }}"
     state: accept
+
+- name: Record needed facts from the newly provisioned infrastructure
+  set_fact:
+    cat_facts: 
+      ec2-vpc_id: "{{ r_ec2_vpc_net.vpc.id }}"
+      ec2_subnet_id: "{{ r_ec2_subnet.subnet.id }}"
+  delegate_to: localhost
+  delegate_facts: yes
+  run_once: yes
+
+  
+
+
+
+
