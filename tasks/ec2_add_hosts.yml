@@ -4,9 +4,15 @@
     filters:  "{{ ec2_lb_filters }}"
   register: ec2
 
-- name: Build a list of ips and hostnames
+- name: Build a list of private ips and hostnames
   set_fact:
     ips_to_add: "{{ ec2.instances | map(attribute='private_ip_address') | list }}"
+  when: not ec2_assign_public_ip
+
+- name: Build a list of public ips and hostnames
+  set_fact:
+    ips_to_add: "{{ ec2.instances | map(attribute='public_ip_address') | list }}"
+  when: ec2_assign_public_ip
 
 - name: Create list of tags
   set_fact:

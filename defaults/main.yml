@@ -1,17 +1,26 @@
 ---
+customer: "ml"
+ec2_env: "cat"
 scope: foo
-ec2_count: "{{ ec2_count }}"
+ec2_count: 2
 ec2_scope : "{{ scope }}"
 ec2_delete: "{{ scope }}"
-ec2_groupid: ""
-ec2_subnetid: "{{ ec2_subnetid }}"
-ec2_lb_target: "{{ ec2_lb_target }}"
-ec2_region: "{{ ec2_region }}"
-ec2_vpc: "{{ ec2_vpc }}"
-ec2_size: "{{ ec2_size | default('t2_micro') }}"
-ec2_ami: "{{ ec2_ami }}"
-ec2_key_name: "{{ ec2_key_name }}"
+
+ec2_region: eu-west-1
+ec2_size: t2_micro
+ec2_ami: ami-0e12cbde3e77cbb98
+ec2_vn_cidr_prefix: "10.0.2.0/24"
+ec2_sub_cidr_prefix: "10.0.2.0/24" 
+ec2_vpc: "{{ customer }}_{{ ec2_env }}_vpc" 
+
+
+ec2_key_name: ec2_key_name 
 ec2_assign_public_ip: false
 ec2_wait: true
+
 ec2_instance_tags:
   Name: "{{ scope }}"
+
+ec2_groupid: ec2_groupid
+ec2_subnetid: ec2_subnetid 
+ec2_lb_target: ec2_lb_target 
