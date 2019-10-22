@@ -48,9 +48,6 @@
 - debug: 
     var: r_lab_default_sg.security_groups.0.group_id
 
-- meta: end_play
-
-
 - name: Add SSH from lab VPC to default SG for "{{ ec2_vpc }}"
   ec2_group:
     name: default
