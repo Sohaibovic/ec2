@@ -31,13 +31,17 @@
     peering_id: "{{ r_ec2_vpc_peer.peering_id }}"
     state: accept
 
-- name: Get default SG for lab VPC
+- name: Get facts for default SG of lab VPC
   ec2_group_facts:
     filters:
       group-name: default
       vpc_id: "{{ ec2_lab_vpc_id }}"
     region: "{{ ec2_region }}"
   register: r_lab_default_sg
+
+- name: Extract SG info
+  set_fact: 
+    lab_sg: "{{ r_lab_default_sg.security_groups.0 }}"
 
 - name: Get default SG for "{{ ec2_vpc }}"  VPC
   ec2_group_facts:
@@ -46,9 +50,6 @@
       vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
     region: "{{ ec2_region }}"
   register: r_app_default_sg
-
-- debug:
-    var: r_lab_default_sg
 
 - name: Add SSH from lab VPC to default SG for "{{ ec2_vpc }}"
   ec2_group:
@@ -61,7 +62,7 @@
       - proto: tcp
         from_port: 22
         to_port: 22
-        group_id: "{{ r_lab_default_sg.security_groups.0.group_id }}"
+        group_id: "{{ lab_sg.owner_id }}/{{ lab_sg.group_id }}/{{ lab_sg.group_name }}"
       - proto: all
         group_id: "{{ r_app_default_sg.security_groups.0.group_id }}"
 
