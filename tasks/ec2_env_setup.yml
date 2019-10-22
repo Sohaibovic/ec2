@@ -54,16 +54,37 @@
     region: "{{ ec2_region }}"
     vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
     description: None
+    purge_rules: no
     rules:
       - proto: tcp
         from_port: 22
         to_port: 22
         group_id: "{{ r_lab_default_sg.security_groups.0.group_id }}"
 
+- name: Find route ID for lab VPC
+  ec2_vpc_route_table_facts:
+    filters:
+      vpc-id: "{{ ec2_lab_vpc_id }}"
+    region: "{{ ec2_region }}"
+  register: r_lab_route
+
+- debug: 
+    var: r_lab_route
+
+- name: Find route ID for  "{{ ec2_vpc }}" VPC
+  ec2_vpc_route_table_facts:
+    filters:
+      vpc-id:  "{{ ec2_vpc }}" 
+    region: "{{ ec2_region }}"
+  register: r_app_route
+
+- debug: 
+    var: r_app_route
+
 - name: Record needed facts from the newly provisioned infrastructure
   set_fact:
     cat_facts: 
-      ec2-vpc_id: "{{ r_ec2_vpc_net.vpc.id }}"
+      ec2-vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
       ec2_subnet_id: "{{ r_ec2_subnet.subnet.id }}"
   delegate_to: localhost
   delegate_facts: yes
