@@ -73,9 +73,6 @@
     region: "{{ ec2_region }}"
   register: r_lab_route
 
-- debug: 
-    var: r_lab_route
-
 - name: Update route for lab VPC
   ec2_vpc_route_table:
     vpc_id:  "{{ ec2_lab_vpc_id }}"
@@ -91,9 +88,6 @@
       vpc-id: "{{ r_ec2_vpc_app.vpc.id }}"
     region: "{{ ec2_region }}"
   register: r_app_route
-
-- debug: 
-    var: r_app_route
 
 - name: Update route for lab VPC
   ec2_vpc_route_table:
