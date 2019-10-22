@@ -38,14 +38,18 @@
     state: accept
 
 - name: Get default SG for lab VPC
-  ec2_group:
-    name: default
-    region: "{{ ec2_region }}"
-    vpc_id: "{{ ec2_lab_vpc_id }}"
+  ec2_group_facts:
+    filters:
+      group-name: default
+      region: "{{ ec2_region }}"
+      vpc_id: "{{ ec2_lab_vpc_id }}"
   register: r_lab_default_sg
 
 - debug: 
     var: r_lab_default_sg
+
+- meta: end_play
+
 
 - name: Add SSH from lab VPC to default SG for "{{ ec2_vpc }}"
   ec2_group:
