@@ -5,27 +5,29 @@
     cidr_block: "{{ ec2_vpc_cidr_prefix }}"
     region: "{{ ec2_region }}"
     state: present
-  register: r_ec2_vpc_net
+  register: r_ec2_vpc_app
 
 - debug: 
-    var: r_ec2_vpc_net.vpc.id
+    var: r_ec2_vpc_app.vpc.id
 
-- name: Create a subnet
+- name: Create a subnet in "{{ ec2_vpc }}"
   ec2_vpc_subnet:
-    vpc_id: "{{ r_ec2_vpc_net.vpc.id }}"
+    vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
     cidr: "{{ ec2_sub_cidr_prefix }}"
     region: "{{ ec2_region }}"
+    resource_tags:
+      Name: "{{ ec2_subnet_name }}"
     state: present
-  register: r_ec2_subnet
+  register: r_ec2_subnet_app
 
 - debug: 
-    var: r_ec2_subnet.subnet.id
+    var: r_ec2_subnet_app.subnet.id
 
 - name: Peer Lab VPC to "{{ ec2_vpc }}" 
   ec2_vpc_peer:
     region: "{{ ec2_region }}"
     vpc_id: "{{ ec2_lab_vpc_id }}"
-    peer_vpc_id: "{{ r_ec2_vpc_net.vpc.id }}"
+    peer_vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
     state: present
   register: r_ec2_vpc_peer
 
@@ -34,6 +36,27 @@
     region: "{{ ec2_region }}"
     peering_id: "{{ r_ec2_vpc_peer.peering_id }}"
     state: accept
+
+- name: Get default SG for lab VPC
+  ec2_group:
+    name: default
+    region: "{{ ec2_region }}"
+    vpc_id: "{{ ec2_lab_vpc_id }}"
+  register: r_lab_default_sg
+
+- debug: 
+    var: r_lab_default_sg
+
+- name: Add SSH from lab VPC to default SG for "{{ ec2_vpc }}"
+  ec2_group:
+    name: default
+    region: "{{ ec2_region }}"
+    vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        group_id: "{{ r_lab_default_sg.group_id }}"
 
 - name: Record needed facts from the newly provisioned infrastructure
   set_fact:
@@ -44,7 +67,7 @@
   delegate_facts: yes
   run_once: yes
 
-  
+
 
 
 

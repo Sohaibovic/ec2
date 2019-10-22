@@ -20,6 +20,7 @@ ec2_instance_tags:
   Name: "{{ scope }}"
 
 ec2_vpc: "{{ customer }}_{{ ec2_env }}_vpc" 
+ec2_subnet_name: "{{ customer }}_{{ ec2_env }}_private" 
 
 
 ec2_lb_target: ec2_lb_target 
