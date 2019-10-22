@@ -46,7 +46,7 @@
   register: r_lab_default_sg
 
 - debug: 
-    var: r_lab_default_sg
+    var: r_lab_default_sg.security_groups.0.group_id
 
 - meta: end_play
 
@@ -60,7 +60,7 @@
       - proto: tcp
         from_port: 22
         to_port: 22
-        group_id: "{{ r_lab_default_sg.group_id }}"
+        group_id: "{{ r_lab_default_sg.security_groups.0.group_id }}"
 
 - name: Record needed facts from the newly provisioned infrastructure
   set_fact:
