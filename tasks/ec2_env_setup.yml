@@ -37,20 +37,6 @@
     peering_id: "{{ r_ec2_vpc_peer.peering_id }}"
     state: accept
 
-- name: Get default SG for lab VPC
-  ec2_group_facts:
-    filters:
-      group-name: default
-      vpc_id: "{{ ec2_lab_vpc_id }}"
-    region: "{{ ec2_region }}"
-  register: r_lab_default_sg
-
-- debug: 
-    var: r_lab_default_sg
-
-- meta: end_play
-
-
 - name: Add SSH from lab VPC to default SG for "{{ ec2_vpc }}"
   ec2_group:
     name: default
@@ -61,6 +47,7 @@
         from_port: 22
         to_port: 22
         group_id: "{{ r_lab_default_sg.group_id }}"
+    state: present
 
 - name: Record needed facts from the newly provisioned infrastructure
   set_fact:
