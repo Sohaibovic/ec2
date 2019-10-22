@@ -85,10 +85,10 @@
       - dest: "{{ ec2_sub_cidr_prefix  }}"
         vpc_peering_connection_id: "{{r_ec2_vpc_peer.peering_id }}"
 
-- name: Find route ID for  "{{ ec2_vpc }}" VPC
+- name: Find route ID for "{{ ec2_vpc }}" VPC
   ec2_vpc_route_table_facts:
     filters:
-      vpc-id:  "{{ ec2_vpc }}" 
+      vpc-id: "{{ r_ec2_vpc_app.vpc.id }}"
     region: "{{ ec2_region }}"
   register: r_app_route
 
