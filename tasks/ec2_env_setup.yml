@@ -47,6 +47,9 @@
     region: "{{ ec2_region }}"
   register: r_app_default_sg
 
+- debug:
+    var: r_lab_default_sg
+
 - name: Add SSH from lab VPC to default SG for "{{ ec2_vpc }}"
   ec2_group:
     name: default
