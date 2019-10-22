@@ -41,8 +41,8 @@
   ec2_group_facts:
     filters:
       group-name: default
-      region: "{{ ec2_region }}"
       vpc_id: "{{ ec2_lab_vpc_id }}"
+    region: "{{ ec2_region }}"
   register: r_lab_default_sg
 
 - debug: 
