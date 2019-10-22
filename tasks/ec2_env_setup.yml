@@ -7,9 +7,6 @@
     state: present
   register: r_ec2_vpc_app
 
-- debug: 
-    var: r_ec2_vpc_app.vpc.id
-
 - name: Create a subnet in "{{ ec2_vpc }}"
   ec2_vpc_subnet:
     vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
@@ -19,9 +16,6 @@
       Name: "{{ ec2_subnet_name }}"
     state: present
   register: r_ec2_subnet_app
-
-- debug: 
-    var: r_ec2_subnet_app.subnet.id
 
 - name: Peer Lab VPC to "{{ ec2_vpc }}" 
   ec2_vpc_peer:
@@ -45,21 +39,28 @@
     region: "{{ ec2_region }}"
   register: r_lab_default_sg
 
-- debug: 
-    var: r_lab_default_sg.security_groups.0.group_id
+- name: Get default SG for "{{ ec2_vpc }}"  VPC
+  ec2_group_facts:
+    filters:
+      group-name: default
+      vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
+    region: "{{ ec2_region }}"
+  register: r_app_default_sg
 
 - name: Add SSH from lab VPC to default SG for "{{ ec2_vpc }}"
   ec2_group:
     name: default
     region: "{{ ec2_region }}"
     vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
-    description: None
-    purge_rules: no
+    description: default VPC security group
+    purge_rules: yes
     rules:
       - proto: tcp
         from_port: 22
         to_port: 22
         group_id: "{{ r_lab_default_sg.security_groups.0.group_id }}"
+      - proto: all
+        group_id: "{{ r_app_default_sg }}"
 
 - name: Find route ID for lab VPC
   ec2_vpc_route_table_facts:
