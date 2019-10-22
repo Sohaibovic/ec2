@@ -53,6 +53,7 @@
     name: default
     region: "{{ ec2_region }}"
     vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
+    description: "Default security group for {{ ec2_vpc }}"
     rules:
       - proto: tcp
         from_port: 22
