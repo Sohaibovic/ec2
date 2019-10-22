@@ -83,7 +83,7 @@
     route_table_id: "{{ r_lab_route.route_tables.0.id }}"
     routes:
       - dest: "{{ ec2_sub_cidr_prefix  }}"
-        vpc_peering_connection_id: "{{ r_ec2_vpc_app.vpc.id }}"
+        vpc_peering_connection_id: "{{r_ec2_vpc_peer.peering_id }}"
 
 - name: Find route ID for  "{{ ec2_vpc }}" VPC
   ec2_vpc_route_table_facts:
@@ -102,7 +102,7 @@
     route_table_id: "{{ r_app_route.route_tables.0.id }}"
     routes:
       - dest: 10.0.0.0/16
-        vpc_peering_connection_id: "{{ r_ec2_vpc_app.vpc.id }}"
+        vpc_peering_connection_id: "{{ r_ec2_vpc_peer.peering_id }}"
 
 - name: Record needed facts from the newly provisioned infrastructure
   set_fact:
