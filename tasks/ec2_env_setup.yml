@@ -77,9 +77,7 @@
     var: r_lab_route
 
 - debug:
-    var:
-      -  ec2_lab_vpc_id 
-      -  r_lab_route.route_tables.0.id 
+    var: r_lab_route.route_tables.0.id 
 
 - name: Update route for lab VPC
   ec2_vpc_route_table:
