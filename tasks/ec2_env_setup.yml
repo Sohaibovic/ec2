@@ -74,14 +74,14 @@
       - dest: "{{ ec2_sub_cidr_prefix  }}"
         vpc_peering_connection_id: "{{r_ec2_vpc_peer.peering_id }}"
     subnets:
-      - 10.0.0.0/16
+      - 10.0.1.0/24
 
 - name: Update route for lab VPC
   ec2_vpc_route_table:
     vpc_id:  "{{ r_ec2_vpc_app.vpc.id }}"
     region: "{{ ec2_region }}"
     routes:
-      - dest: 10.0.0.0/16
+      - dest: 10.0.1.0/24
         vpc_peering_connection_id: "{{ r_ec2_vpc_peer.peering_id }}"
     subnets:
       - "{{ ec2_sub_cidr_prefix }}"
