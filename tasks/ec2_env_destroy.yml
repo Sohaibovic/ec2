@@ -1,5 +1,4 @@
 ---
-- name: Delete SG rule to peer
 
 - name: Get vpc details for "{{ ec2_vpc }}"
   ec2_vpc_net_facts:
