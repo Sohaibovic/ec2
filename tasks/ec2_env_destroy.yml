@@ -1,0 +1,9 @@
+---
+- name: Delete SG rule to peer
+
+- name: Remove route to peer 
+
+- name: Delete Peering
+
+- name: Delete VPC
+
