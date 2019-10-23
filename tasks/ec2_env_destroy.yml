@@ -14,7 +14,7 @@
   ec2_group_facts:
     filters:
       group-name: default
-      vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
+      vpc_id: "{{ r_ec2_vpc_app.vpcs.0.id }}"
     region: "{{ ec2_region }}"
   register: r_app_default_sg
 
@@ -22,7 +22,7 @@
   ec2_group:
     name: default
     region: "{{ ec2_region }}"
-    vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
+    vpc_id: "{{ r_ec2_vpc_app.vpcs.0.id }}"
     description: default VPC security group
     purge_rules: yes
     rules:
