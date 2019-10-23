@@ -7,6 +7,9 @@
     region: "{{ ec2_region }}"
   register: r_ec2_vpc_app
 
+- debug: 
+    var: r_ec2_vpc_app
+
 - name: Get default SG for "{{ ec2_vpc }}"  VPC
   ec2_group_facts:
     filters:
