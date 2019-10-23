@@ -4,6 +4,7 @@
   ec2_vpc_net_facts:
     filters:
       "tag:Name": "{{ ec2_vpc }}"
+    region: "{{ ec2_region }}"
   register: r_ec2_vpc_app
 
 - name: Get default SG for "{{ ec2_vpc }}"  VPC
