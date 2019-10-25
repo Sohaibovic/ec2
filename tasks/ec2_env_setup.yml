@@ -2,7 +2,7 @@
 - name: Create a VPC "{{ ec2_vpc }}"
   ec2_vpc_net:
     name: "{{ ec2_vpc }}"
-    cidr_block: "{{ ec2_vpc_cidr_prefix }}"
+    cidr_block: "{{ ec2_app_cidr_prefix }}"
     region: "{{ ec2_region }}"
     state: present
   register: r_ec2_vpc_app
@@ -10,7 +10,7 @@
 - name: Create a subnet in "{{ ec2_vpc }}"
   ec2_vpc_subnet:
     vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
-    cidr: "{{ ec2_sub_cidr_prefix }}"
+    cidr: "{{ ec2_app_cidr_prefix }}"
     region: "{{ ec2_region }}"
     resource_tags:
       Name: "{{ ec2_subnet_name }}"
@@ -71,7 +71,7 @@
     vpc_id:  "{{ ec2_lab_vpc_id }}"
     region: "{{ ec2_region }}"
     routes:
-      - dest: "{{ ec2_sub_cidr_prefix  }}"
+      - dest: "{{ ec2_app_cidr_prefix  }}"
         vpc_peering_connection_id: "{{r_ec2_vpc_peer.peering_id }}"
     # subnets:
     #   - 10.0.1.0/24
@@ -81,7 +81,7 @@
     vpc_id:  "{{ r_ec2_vpc_app.vpc.id }}"
     region: "{{ ec2_region }}"
     routes:
-      - dest: 10.0.1.0/24
+      - dest: 10.0.0.0/16
         vpc_peering_connection_id: "{{ r_ec2_vpc_peer.peering_id }}"
     # subnets:
     #   - "{{ ec2_sub_cidr_prefix }}"
