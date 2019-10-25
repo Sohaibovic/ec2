@@ -66,23 +66,45 @@
       - proto: all
         group_id: "{{ r_app_default_sg.security_groups.0.group_id }}"
 
-- name: Create route for lab VPC to peering VPC
-  ec2_vpc_route_table:
-    vpc_id:  "{{ ec2_lab_vpc_id }}"
+- name: Find route ID for lab VPC
+  ec2_vpc_route_table_facts:
+    filters:
+      vpc-id: "{{ ec2_lab_vpc_id }}"
     region: "{{ ec2_region }}"
-    routes:
-      - dest: "{{ ec2_app_cidr_prefix  }}"
-        vpc_peering_connection_id: "{{r_ec2_vpc_peer.peering_id }}"
+  register: r_lab_route
+
+- debug:
+    var: r_lab_route.route_tables.0.id 
+
+- name: Find route ID for "{{ ec2_vpc }}" VPC
+  ec2_vpc_route_table_facts:
+    filters:
+      vpc-id: "{{ r_ec2_vpc_app.vpc.id }}"
+    region: "{{ ec2_region }}"
+  register: r_app_route
+
+- debug: 
+    var: r_app_route.route_tables.0.id 
+
+
+
+# - name: Create route for lab VPC to peering VPC
+#   ec2_vpc_route_table:
+#     vpc_id:  "{{ ec2_lab_vpc_id }}"
+#     region: "{{ ec2_region }}"
+#     routes:
+#       - dest: "{{ ec2_app_cidr_prefix  }}"
+#         vpc_peering_connection_id: "{{r_ec2_vpc_peer.peering_id }}"
     # subnets:
     #   - 10.0.1.0/24
 
-- name: Create route for app VPC
-  ec2_vpc_route_table:
-    vpc_id:  "{{ r_ec2_vpc_app.vpc.id }}"
-    region: "{{ ec2_region }}"
-    routes:
-      - dest: 10.0.0.0/16
-        vpc_peering_connection_id: "{{ r_ec2_vpc_peer.peering_id }}"
+# - name: Create route for app VPC
+#   ec2_vpc_route_table:
+#     vpc_id:  "{{ r_ec2_vpc_app.vpc.id }}"
+#     region: "{{ ec2_region }}"
+#     routes:
+#       - dest: 10.0.0.0/16
+#         vpc_peering_connection_id: "{{ r_ec2_vpc_peer.peering_id }}"
     # subnets:
     #   - "{{ ec2_sub_cidr_prefix }}"
 
