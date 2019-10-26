@@ -7,7 +7,7 @@
     state: present
   register: r_ec2_vpc_app
 
-- name: Create a subnet in "{{ ec2_vpc }}"
+- name: Create a public subnet in "{{ ec2_vpc }}"
   ec2_vpc_subnet:
     vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
     cidr: "{{ ec2_app_cidr_prefix }}"
@@ -15,7 +15,32 @@
     resource_tags:
       Name: "{{ ec2_subnet_name }}"
     state: present
+    tags: 
+      - Name: "{{ ec2_vpc }}_pub" 
   register: r_ec2_subnet_app
+
+- name: Create a private subnet in "{{ ec2_vpc }}"
+  ec2_vpc_subnet:
+    vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
+    cidr: "{{ ec2_app_cidr_prefix }}"
+    region: "{{ ec2_region }}"
+    resource_tags:
+      Name: "{{ ec2_subnet_name }}"
+    state: present
+    tags: 
+      - Name: "{{ ec2_vpc }}_prv" 
+  register: r_ec2_subnet_app
+
+- name: Create igw in "{{ ec2_vpc }}_pub" 
+  ec2_vpc_igw:
+    vpc_id: "{{ ec2_vpc }}"
+    state: present
+  register: igw
+
+# - name: Create natgw in "{{ ec2_vpc }}_pub" 
+
+- debug: 
+    var: igw
 
 - name: Peer Lab VPC to "{{ ec2_vpc }}" 
   ec2_vpc_peer:
