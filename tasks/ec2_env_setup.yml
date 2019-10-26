@@ -39,16 +39,18 @@
   register: r_igw
 
 - debug: 
-    var: igw
+    var: r_igw
 
 - name: Create natgw in "{{ ec2_vpc }}_pub" 
   ec2_vpc_nat_gateway:
     state: present
     subnet_id: "{{ r_ec2_subnet_app_pub.subnet.id }}" 
-    wait: yes
+    wait: no
     region: "{{ ec2_region }}"
   register: r_nat_gateway
 
+- debug: 
+    var: r_nat_gateway
 
 - name: Peer Lab VPC to "{{ ec2_vpc }}" 
   ec2_vpc_peer:
@@ -119,8 +121,6 @@
 - debug: 
     var: r_app_route.route_tables.0.id 
 
-
-
 # - name: Create route for lab VPC to peering VPC
 #   ec2_vpc_route_table:
 #     vpc_id:  "{{ ec2_lab_vpc_id }}"
@@ -131,7 +131,7 @@
     # subnets:
     #   - 10.0.1.0/24
 
-# - name: Create route for app VPC
+# - name: Create route for app VPC to peering VPC
 #   ec2_vpc_route_table:
 #     vpc_id:  "{{ r_ec2_vpc_app.vpc.id }}"
 #     region: "{{ ec2_region }}"
@@ -140,6 +140,27 @@
 #         vpc_peering_connection_id: "{{ r_ec2_vpc_peer.peering_id }}"
     # subnets:
     #   - "{{ ec2_sub_cidr_prefix }}"
+
+# - name: Create route for app private subnet to natgw
+#   ec2_vpc_route_table:
+#     vpc_id:  "{{ ec2_lab_vpc_id }}"
+#     region: "{{ ec2_region }}"
+#     routes:
+#       - dest: "{{ ec2_app_cidr_prefix  }}"
+#         vpc_peering_connection_id: "{{r_ec2_vpc_peer.peering_id }}"
+    # subnets:
+    #   - 10.0.1.0/24
+
+# - name: Create route for app public subnet to igw
+#   ec2_vpc_route_table:
+#     vpc_id:  "{{ ec2_lab_vpc_id }}"
+#     region: "{{ ec2_region }}"
+#     routes:
+#       - dest: "{{ ec2_app_cidr_prefix  }}"
+#         vpc_peering_connection_id: "{{r_ec2_vpc_peer.peering_id }}"
+    # subnets:
+    #   - 10.0.1.0/24
+
 
 - name: Record needed facts from the newly provisioned infrastructure
   set_fact:
