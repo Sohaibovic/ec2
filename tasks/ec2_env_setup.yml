@@ -116,7 +116,7 @@
   ec2_vpc_route_table:
     vpc_id:  "{{ r_ec2_vpc_app.vpc.id }}"
     region: "{{ ec2_region }}"
-    route_table_id:
+    route_table_id: "{{ r_app_route.route_tables.0.id }}"
     routes:
       - dest: 10.0.0.0/16
         vpc_peering_connection_id: "{{ r_ec2_vpc_peer.peering_id }}"
@@ -182,7 +182,7 @@
   set_fact:
     cat_facts: 
       ec2-vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
-      ec2_subnet_id: "{{ r_ec2_subnet_app.subnet.id }}"
+      ec2_subnet_id: "{{ r_ec2_subnet_app_pv.subnet.id }}"
   delegate_to: localhost
   delegate_facts: yes
   run_once: yes
