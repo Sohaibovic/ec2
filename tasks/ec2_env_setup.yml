@@ -33,6 +33,7 @@
 
 - name: Create igw in "{{ ec2_vpc }}_pub" 
   ec2_vpc_igw:
+    region: "{{ ec2_region }}"
     vpc_id: "{{ ec2_vpc }}"
     state: present
   register: igw
