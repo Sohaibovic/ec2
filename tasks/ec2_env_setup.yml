@@ -101,7 +101,7 @@
       - proto: all
         group_id: "{{ r_app_default_sg.security_groups.0.group_id }}"
 
-- name: Find route ID for lab VPC
+- name: Find route table ID for lab VPC
   ec2_vpc_route_table_facts:
     filters:
       vpc-id: "{{ ec2_lab_vpc_id }}"
@@ -111,12 +111,25 @@
 - debug:
     var: r_lab_route.route_tables.0.id 
 
-- name: Find route ID for "{{ ec2_vpc }}" VPC
+- name: Find route table ID for "{{ ec2_vpc }}" VPC
   ec2_vpc_route_table_facts:
     filters:
       vpc-id: "{{ r_ec2_vpc_app.vpc.id }}"
     region: "{{ ec2_region }}"
   register: r_app_route
+
+- name: Create route table for the public network of "{{ ec2_vpc }}" VPC
+  ec2_vpc_route_table:
+    vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
+    region: "{{ ec2_region }}"
+    purge_routes: no
+    tags:
+      Name: "{{ ec2_vpc }}_pub" 
+    subnets:
+      - "{{ r_ec2_subnet_app_pub.subnet.id }}" 
+    routes:
+      - dest: 0.0.0.0/0
+        gateway_id: "{{ r_igw.gateway_id }}"
 
 - debug: 
     var: r_app_route.route_tables.0.id 
