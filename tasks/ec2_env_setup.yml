@@ -46,6 +46,7 @@
     state: present
     subnet_id: "{{ r_ec2_subnet_app_pub.subnet.id }}" 
     wait: no
+    if_exist_do_not_create: yes
     region: "{{ ec2_region }}"
   register: r_nat_gateway
 
@@ -101,22 +102,25 @@
       - proto: all
         group_id: "{{ r_app_default_sg.security_groups.0.group_id }}"
 
-- name: Find route table ID for lab VPC
-  ec2_vpc_route_table_facts:
-    filters:
-      vpc-id: "{{ ec2_lab_vpc_id }}"
-    region: "{{ ec2_region }}"
-  register: r_lab_route
-
-- debug:
-    var: r_lab_route.route_tables.0.id 
-
-- name: Find route table ID for "{{ ec2_vpc }}" VPC
+- name: Find default route table ID for "{{ ec2_vpc }}" VPC
   ec2_vpc_route_table_facts:
     filters:
       vpc-id: "{{ r_ec2_vpc_app.vpc.id }}"
     region: "{{ ec2_region }}"
   register: r_app_route
+
+- debug: 
+    var: r_app_route.route_tables.0.id 
+
+- name: Update default route table for app
+  ec2_vpc_route_table:
+    vpc_id:  "{{ r_ec2_vpc_app.vpc.id }}"
+    region: "{{ ec2_region }}"
+    route_table_id:
+    routes:
+      - dest: 10.0.0.0/16
+        vpc_peering_connection_id: "{{ r_ec2_vpc_peer.peering_id }}"
+
 
 - name: Create route table for the public network of "{{ ec2_vpc }}" VPC
   ec2_vpc_route_table:
@@ -131,28 +135,27 @@
       - dest: 0.0.0.0/0
         gateway_id: "{{ r_igw.gateway_id }}"
 
-- debug: 
-    var: r_app_route.route_tables.0.id 
+- name: Find route table ID for lab VPC
+  ec2_vpc_route_table_facts:
+    filters:
+      vpc-id: "{{ ec2_lab_vpc_id }}"
+    region: "{{ ec2_region }}"
+  register: r_lab_route
 
-# - name: Create route for lab VPC to peering VPC
-#   ec2_vpc_route_table:
-#     vpc_id:  "{{ ec2_lab_vpc_id }}"
-#     region: "{{ ec2_region }}"
-#     routes:
-#       - dest: "{{ ec2_app_cidr_prefix  }}"
-#         vpc_peering_connection_id: "{{r_ec2_vpc_peer.peering_id }}"
-    # subnets:
-    #   - 10.0.1.0/24
+- debug:
+    var: r_lab_route.route_tables.0.id 
 
-# - name: Create route for app VPC to peering VPC
-#   ec2_vpc_route_table:
-#     vpc_id:  "{{ r_ec2_vpc_app.vpc.id }}"
-#     region: "{{ ec2_region }}"
-#     routes:
-#       - dest: 10.0.0.0/16
-#         vpc_peering_connection_id: "{{ r_ec2_vpc_peer.peering_id }}"
-    # subnets:
-    #   - "{{ ec2_sub_cidr_prefix }}"
+- name: Update route table for lab VPC to peering VPC
+  ec2_vpc_route_table:
+    vpc_id:  "{{ ec2_lab_vpc_id }}"
+    region: "{{ ec2_region }}"
+    route_table_id: r_lab_route.route_tables.0.id 
+    purge_routes: no
+    routes:
+      - dest: "{{ ec2_app_cidr_prefix  }}"
+        vpc_peering_connection_id: "{{r_ec2_vpc_peer.peering_id }}"
+
+
 
 # - name: Create route for app private subnet to natgw
 #   ec2_vpc_route_table:
