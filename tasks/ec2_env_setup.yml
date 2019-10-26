@@ -17,7 +17,7 @@
     state: present
     tags: 
       - Name: "{{ ec2_vpc }}_pub" 
-  register: r_ec2_subnet_app
+  register: r_ec2_subnet_app_pub
 
 - name: Create a private subnet in "{{ ec2_vpc }}"
   ec2_vpc_subnet:
@@ -29,19 +29,26 @@
     state: present
     tags: 
       - Name: "{{ ec2_vpc }}_prv" 
-  register: r_ec2_subnet_app
+  register: r_ec2_subnet_app_pv
 
 - name: Create igw in "{{ ec2_vpc }}_pub" 
   ec2_vpc_igw:
     region: "{{ ec2_region }}"
-    vpc_id: "{{ ec2_vpc }}"
+    vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
     state: present
-  register: igw
-
-# - name: Create natgw in "{{ ec2_vpc }}_pub" 
+  register: r_igw
 
 - debug: 
     var: igw
+
+- name: Create natgw in "{{ ec2_vpc }}_pub" 
+  ec2_vpc_nat_gateway:
+    state: present
+    subnet_id: "{{ r_ec2_subnet_app_pub.subnet.id }}" 
+    wait: yes
+    region: "{{ ec2_region }}"
+  register: r_nat_gateway
+
 
 - name: Peer Lab VPC to "{{ ec2_vpc }}" 
   ec2_vpc_peer:
