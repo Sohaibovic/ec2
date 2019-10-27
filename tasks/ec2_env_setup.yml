@@ -111,7 +111,7 @@
       - proto: all
         group_id: "{{ r_app_default_sg.security_groups.0.group_id }}"
 
-- name: Find route table ID for lab VPC
+- name: Find default route table ID for lab VPC
   ec2_vpc_route_table_facts:
     filters:
       vpc-id: "{{ ec2_lab_vpc_id }}"
@@ -121,12 +121,13 @@
 - debug:
     var: r_lab_route.route_tables.0.id 
 
-- name: Update route table for lab VPC to peering VPC
+- name: Update default route table for lab VPC to peering VPC
   ec2_vpc_route_table:
     vpc_id:  "{{ ec2_lab_vpc_id }}"
     region: "{{ ec2_region }}"
     route_table_id: r_lab_route.route_tables.0.id 
     purge_routes: no
+    lookup: id
     routes:
       - dest: "{{ ec2_app_cidr }}"
         vpc_peering_connection_id: "{{r_ec2_vpc_peer.peering_id }}"
@@ -147,6 +148,7 @@
     region: "{{ ec2_region }}"
     route_table_id: "{{ r_app_route.route_tables.0.id }}"
     purge_routes: no
+    lookup: id
     tags:
       Name: "{{ ec2_vpc }}_pub" 
     routes:
