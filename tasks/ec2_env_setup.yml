@@ -128,6 +128,8 @@
     routes:
       - dest: "{{ ec2_app_cidr }}"
         vpc_peering_connection_id: "{{r_ec2_vpc_peer.peering_id }}"
+  # Add route existence check
+  ignore_errors: yes
 
 - name: Find default route table ID for "{{ ec2_vpc }}" VPC
   ec2_vpc_route_table_facts:
@@ -151,6 +153,8 @@
     routes:
       - dest: 0.0.0.0/0
         gateway_id: "{{ r_igw.gateway_id }}"
+  # Add route existence check
+  ignore_errors: yes
 
 - name: Create route table for the private network of "{{ ec2_vpc }}" VPC with NAT and Peering
   ec2_vpc_route_table:
