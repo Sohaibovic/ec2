@@ -2,7 +2,7 @@
 - name: Create a VPC "{{ ec2_vpc }}"
   ec2_vpc_net:
     name: "{{ ec2_vpc }}"
-    cidr_block: "{{ ec2_app_cidr_pub }}"
+    cidr_block: "{{ ec2_app_cidr}}"
     region: "{{ ec2_region }}"
     state: present
     tags: 
@@ -15,7 +15,7 @@
     cidr: "{{ ec2_app_cidr_pub }}"
     region: "{{ ec2_region }}"
     resource_tags:
-      Name: "{{ ec2_subnet_name }}"
+      Name: "{{ ec2_subnet_name }}_pub"
     state: present
     tags: 
       - Name: "{{ ec2_vpc }}_pub" 
@@ -27,7 +27,7 @@
     cidr: "{{ ec2_app_cidr_prv }}"
     region: "{{ ec2_region }}"
     resource_tags:
-      Name: "{{ ec2_subnet_name }}"
+      Name: "{{ ec2_subnet_name }}_prv"
     state: present
     tags: 
       Name: "{{ ec2_vpc }}_prv" 
