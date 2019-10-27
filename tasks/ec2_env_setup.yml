@@ -56,6 +56,16 @@
 
 - debug: 
     var: r_nat_gateway
+ 
+- name: Get facts for the nat gateway
+  ec2_vpc_nat_gateway_facts:
+    nat_gateway_ids:
+      - "{{ r_nat_gateway.nat_gateway_id }}"
+    region: "{{ ec2_region }}"
+  register: r_nat_facts
+
+- debug: 
+    var: r_nat_facts
 
 - name: Peer Ansible VPC to "{{ ec2_vpc }}" 
   ec2_vpc_peer:
