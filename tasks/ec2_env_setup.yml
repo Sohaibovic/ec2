@@ -6,7 +6,7 @@
     region: "{{ ec2_region }}"
     state: present
     tags: 
-      - Name: "{{ ec2_vpc }}" 
+      Name: "{{ ec2_vpc }}" 
   register: r_ec2_vpc_app
 
 - name: Create a public subnet in "{{ ec2_vpc }}"
@@ -30,7 +30,7 @@
       Name: "{{ ec2_subnet_name }}"
     state: present
     tags: 
-      - Name: "{{ ec2_vpc }}_prv" 
+      Name: "{{ ec2_vpc }}_prv" 
   register: r_ec2_subnet_app_prv
 
 - name: Create igw in "{{ ec2_vpc }}" 
@@ -39,7 +39,7 @@
     vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
     state: present
     tags: 
-      - Name: "{{ ec2_vpc }}_igw" 
+      Name: "{{ ec2_vpc }}_igw" 
   register: r_igw
 
 - debug: 
@@ -64,7 +64,7 @@
     peer_vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
     state: present
     tags: 
-      - Name: "{{ ec2_vpc }}_peering" 
+      Name: "{{ ec2_vpc }}_peering" 
   register: r_ec2_vpc_peer
 
 - name: Accept peering connection from remote account
