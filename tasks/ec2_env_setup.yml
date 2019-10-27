@@ -172,7 +172,7 @@
       - "{{ r_ec2_subnet_app_prv.subnet.id }}" 
     routes:
       - dest: 0.0.0.0/0
-      - nat_gateway_id: "{{ r_nat_facts.result.0.nat_gateway_addresses.0.network_interface_id }}" 
+        nat_gateway_id: "{{ r_nat_facts.result.0.nat_gateway_addresses.0.network_interface_id }}" 
 
 - name: Record needed facts from the newly provisioned infrastructure
   set_fact:
