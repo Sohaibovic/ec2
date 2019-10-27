@@ -2,7 +2,7 @@
 - name: Create a VPC "{{ ec2_vpc }}"
   ec2_vpc_net:
     name: "{{ ec2_vpc }}"
-    cidr_block: "{{ ec2_app_cidr_prefix }}"
+    cidr_block: "{{ ec2_app_cidr_pub }}"
     region: "{{ ec2_region }}"
     state: present
     tags: 
