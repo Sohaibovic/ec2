@@ -125,7 +125,7 @@
     route_table_id: r_lab_route.route_tables.0.id 
     purge_routes: no
     routes:
-      - dest: "{{ ec2_app_cidr_prefix  }}"
+      - dest: "{{ ec2_app_cidr }}"
         vpc_peering_connection_id: "{{r_ec2_vpc_peer.peering_id }}"
 
 - name: Find default route table ID for "{{ ec2_vpc }}" VPC
