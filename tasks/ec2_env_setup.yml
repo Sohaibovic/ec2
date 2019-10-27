@@ -39,7 +39,7 @@
     vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
     state: present
     tags: 
-      Name: "{{ ec2_vpc }}_igw" 
+      Name: "{{ ec2_app }}_igw" 
   register: r_igw
 
 - debug: 
@@ -64,7 +64,7 @@
     peer_vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
     state: present
     tags: 
-      Name: "{{ ec2_vpc }}_peering" 
+      Name: "{{ ec2_app }}_peering" 
   register: r_ec2_vpc_peer
 
 - name: Accept peering connection from remote account
@@ -162,7 +162,7 @@
       - "{{ r_ec2_subnet_app_prv.subnet.id }}" 
     routes:
       - dest: 0.0.0.0/0
-      - nat_gateway_id: "{{ r_nat_gateway.nat_gateway_id }}" 
+      - nat_gateway_id: "{{ r_nat_gateway.nat_gateway_addresses.network_interface_id }}" 
 
 - name: Record needed facts from the newly provisioned infrastructure
   set_fact:
