@@ -56,9 +56,6 @@
 
 - debug: 
     var: r_nat_gateway
- 
-- debug: 
-    var: r_nat_facts
 
 - name: Peer Ansible VPC to "{{ ec2_vpc }}" 
   ec2_vpc_peer:
@@ -121,11 +118,11 @@
 - debug:
     var: r_lab_route.route_tables.0.id 
 
-- name: Update default route table for lab VPC to peering VPC
+- name: Update default route table for Ansible VPC to peering VPC
   ec2_vpc_route_table:
     vpc_id:  "{{ ec2_lab_vpc_id }}"
     region: "{{ ec2_region }}"
-    route_table_id: r_lab_route.route_tables.0.id 
+    route_table_id: "{{ r_lab_route.route_tables.0.id }}" 
     purge_routes: no
     lookup: id
     routes:
@@ -142,7 +139,7 @@
 - debug: 
     var: r_app_route.route_tables.0.id 
 
-- name: Update default route table for app in "{{ ec2_vpc }}" VPC for peering and igw
+- name: Update default route table for app in "{{ ec2_vpc }}" VPC for igw
   ec2_vpc_route_table:
     vpc_id:  "{{ r_ec2_vpc_app.vpc.id }}"
     region: "{{ ec2_region }}"
@@ -152,22 +149,10 @@
     tags:
       Name: "{{ ec2_vpc }}_pub" 
     routes:
-      - dest: 10.0.0.0/16
-        vpc_peering_connection_id: "{{ r_ec2_vpc_peer.peering_id }}"
       - dest: 0.0.0.0/0
         gateway_id: "{{ r_igw.gateway_id }}"
 
-# - name: Get facts for the nat gateway
-#   ec2_vpc_nat_gateway_facts:
-#     nat_gateway_ids:
-#       - "{{ r_nat_gateway.nat_gateway_id }}"
-#     region: "{{ ec2_region }}"
-#   register: r_nat_facts
-#   until: r_nat_facts.result.0.nat_gateway_addresses.0.
-#   retries: 20
-#   delay: 5
-
-- name: Create route table for the private network of "{{ ec2_vpc }}" VPC
+- name: Create route table for the private network of "{{ ec2_vpc }}" VPC with NAT and Peering
   ec2_vpc_route_table:
     vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
     region: "{{ ec2_region }}"
@@ -177,15 +162,16 @@
       - "{{ r_ec2_subnet_app_prv.subnet.id }}" 
     routes:
       - dest: 0.0.0.0/0
-        #nat_gateway_id: "{{ r_nat_facts.result.0.nat_gateway_addresses.0.network_interface_id }}" 
         gateway_id:  "{{ r_nat_gateway.nat_gateway_id }}" 
+      - dest: 10.0.0.0/16
+        vpc_peering_connection_id: "{{ r_ec2_vpc_peer.peering_id }}"
 
 - name: Record needed facts from the newly provisioned infrastructure
   set_fact:
     cat_facts: 
       ec2_vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
       ec2_subnet_id: "{{ r_ec2_subnet_app_prv.subnet.id }}"
-  delegate_to: localhost
+  delegate_to: fact_store
   delegate_facts: yes
   run_once: yes
 
