@@ -65,6 +65,16 @@
     nat_gateway_id: "{{ r_nat.NatGatewayId }}"
     release_eip: yes
 
+- name: Find default route table ID for lab VPC
+  ec2_vpc_route_table_facts:
+    filters:
+      vpc-id: "{{ ec2_lab_vpc_id }}"
+    region: "{{ ec2_region }}"
+  register: r_lab_route
+
+- debug:
+    var: r_lab_route.route_tables.0.id 
+
 
 
 
