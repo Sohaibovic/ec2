@@ -49,6 +49,8 @@
 - name: Get NAT gateway facts
   ec2_vpc_nat_gateway_facts:
     region: "{{ ec2_region }}"
+    filter: 
+      vpc-id: vpc-029231892ce854101
   register: r_nat
 
 - debug:
