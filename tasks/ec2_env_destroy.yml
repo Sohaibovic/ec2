@@ -1,5 +1,7 @@
 ---
 
+- name: Delete instances
+
 - name: Get vpc details for "{{ ec2_vpc }}"
   ec2_vpc_net_facts:
     filters:
@@ -28,6 +30,12 @@
     rules:
       - proto: all
         group_id: "{{ r_app_default_sg.security_groups.0.group_id }}"
+
+- name: Remove Peering
+
+- name: Remove NAT gateway (wait for)
+
+
 
 # - name: Find route ID for lab VPC
 #   ec2_vpc_route_table_facts:
