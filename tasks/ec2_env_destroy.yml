@@ -49,7 +49,7 @@
 - name: Get NAT gateway facts
   ec2_vpc_nat_gateway_facts:
     region: "{{ ec2_region }}"
-    filter: 
+    filters: 
       vpc-id: vpc-029231892ce854101
   register: r_nat
 
@@ -60,7 +60,6 @@
   ec2_vpc_nat_gateway:
     state: absent
     region: "{{ ec2_region }}"
-    region: ap-southeast-2
     nat_gateway_id: "{{ r_nat.NatGatewayId }}"
     release_eip: yes
 
