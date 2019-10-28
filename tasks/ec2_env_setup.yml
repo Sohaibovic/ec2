@@ -42,9 +42,6 @@
       Name: "{{ ec2_app }}_igw" 
   register: r_igw
 
-- debug: 
-    var: r_igw
-
 - name: Create natgw in "{{ ec2_vpc }}" 
   ec2_vpc_nat_gateway:
     state: present
@@ -53,9 +50,6 @@
     if_exist_do_not_create: yes
     region: "{{ ec2_region }}"
   register: r_nat_gateway
-
-- debug: 
-    var: r_nat_gateway
 
 - name: Peer Ansible VPC to "{{ ec2_vpc }}" 
   ec2_vpc_peer:
@@ -115,9 +109,6 @@
     region: "{{ ec2_region }}"
   register: r_lab_route
 
-- debug:
-    var: r_lab_route.route_tables.0.id 
-
 - name: Update default route table for Ansible VPC to peering VPC
   ec2_vpc_route_table:
     vpc_id:  "{{ ec2_lab_vpc_id }}"
@@ -137,9 +128,6 @@
       vpc-id: "{{ r_ec2_vpc_app.vpc.id }}"
     region: "{{ ec2_region }}"
   register: r_app_route
-
-- debug: 
-    var: r_app_route.route_tables.0.id 
 
 - name: Update default route table for app in "{{ ec2_vpc }}" VPC for igw
   ec2_vpc_route_table:
