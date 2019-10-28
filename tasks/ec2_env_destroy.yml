@@ -32,7 +32,6 @@
 - name: Find peering facts
   ec2_vpc_peering_facts:
     region: "{{ ec2_region }}"
-    vpc_id: "{{ r_ec2_vpc_app.vpcs.0.id }}"
     filters:
       "tag:Name": "{{ ec2_app }}_peering"    
   register: r_vpc_peers
