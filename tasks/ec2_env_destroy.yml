@@ -73,7 +73,7 @@
   register: r_lab_route
 
 - debug:
-    var: r_lab_route.route_tables.0.id 
+    var: r_lab_route
 
 
 
