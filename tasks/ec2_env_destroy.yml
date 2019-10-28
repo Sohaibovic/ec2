@@ -46,7 +46,6 @@
     peering_id: "{{ r_vpc_peers.result.0.vpc_peering_connection_id }}"
     state: absent
 
-
 - name: Get NAT gateway facts
   ec2_vpc_nat_gateway_facts:
     region: "{{ ec2_region }}"
