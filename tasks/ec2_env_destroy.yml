@@ -75,6 +75,14 @@
 - debug:
     var: r_lab_route
 
+- set_fact:
+    needed_routes: "{{ lookup('routes', r_lab_route.route_tables.0) }}"
+
+
+- debug:
+    var: needed_routes
+
+
 # - name: Remove peering for "{{r_ec2_vpc_peer.peering_id }}" route for lab VPC
 #   ec2_vpc_route_table:
 #     vpc_id:  "{{ ec2_lab_vpc_id }}"
