@@ -28,7 +28,7 @@ class LookupModule(LookupBase):
                     
                     elem['dest'] = needed['destination_cidr_block']
                     
-                    sources = needed.keys()
+                    sources = list(needed.keys())
                     sources.remove('destination_cidr_block')
                     sources.remove('state')
                     sources.remove('origin')
