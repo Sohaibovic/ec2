@@ -25,6 +25,7 @@ class LookupModule(LookupBase):
                 else: 
                     elem = {}
                     needed = {k: v for k, v in route.items() if v is not None} 
+                    
                     elem['dest'] = needed['destination_cidr_block']
                     
                     sources = needed.keys()
