@@ -96,3 +96,4 @@
     name: "{{ ec2_vpc }}"
     region: "{{ ec2_region }}"
     state: absent
+    cidr_block: "{{ ec2_app_cidr}}"
