@@ -41,7 +41,6 @@
     var: r_vpc_peers
     verbosity: 4
 
-
 - name: Remove Peering
   ec2_vpc_peer:
     region: "{{ ec2_region }}"
@@ -59,7 +58,6 @@
 - debug:
     var: r_nat
     verbosity: 4
-
 
 - name: Remove NAT gateway
   ec2_vpc_nat_gateway:
@@ -93,48 +91,8 @@
     route_table_id: "{{ r_lab_route.route_tables.0.id }}"
     routes: "{{ needed_routes }}"
       
-
-# - name: Find route ID for lab VPC
-#   ec2_vpc_route_table_facts:
-#     filters:
-#       vpc-id: "{{ ec2_lab_vpc_id }}"
-#     region: "{{ ec2_region }}"
-#   register: r_lab_route
-
-# - name: Update route for lab VPC
-#   ec2_vpc_route_table:
-#     vpc_id:  "{{ ec2_lab_vpc_id }}"
-#     region: "{{ ec2_region }}"
-#     route_table_id: "{{ r_lab_route.route_tables.0.id }}"
-#     routes:
-#       - dest: "{{ ec2_sub_cidr_prefix  }}"
-#         vpc_peering_connection_id: "{{r_ec2_vpc_peer.peering_id }}"
-
-# - name: Find route ID for "{{ ec2_vpc }}" VPC
-#   ec2_vpc_route_table_facts:
-#     filters:
-#       vpc-id: "{{ r_ec2_vpc_app.vpc.id }}"
-#     region: "{{ ec2_region }}"
-#   register: r_app_route
-
-# - debug: 
-#     var: r_app_route
-
-# - debug:
-#     var:
-#       - r_ec2_vpc_app.vpc.id  
-#       -  r_app_route.route_tables.0.id 
-
-# - name: Update route for lab VPC
-#   ec2_vpc_route_table:
-#     vpc_id:  "{{ r_ec2_vpc_app.vpc.id }}"
-#     region: "{{ ec2_region }}"
-#     route_table_id: "{{ r_app_route.route_tables.0.id }}"
-#     routes:
-#       - dest: 10.0.0.0/16
-#         vpc_peering_connection_id: "{{ r_ec2_vpc_peer.peering_id }}"
-
-# - name: Delete Peering
-
-# - name: Delete VPC
-
+- name: Delete VPC "{{ ec2_vpc }}"
+  ec2_vpc_net:
+    name: "{{ ec2_vpc }}"
+    region: "{{ ec2_region }}"
+    state: absent
