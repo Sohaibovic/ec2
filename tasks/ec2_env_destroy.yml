@@ -92,7 +92,6 @@
     route_table_id: "{{ r_lab_route.route_tables.0.id }}"
     routes: "{{ needed_routes }}"
       
-    loop: "{{ r_lab_route.route_tables.0.routes }}" 
 
 # - name: Find route ID for lab VPC
 #   ec2_vpc_route_table_facts:
