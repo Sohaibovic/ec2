@@ -75,16 +75,15 @@
 - debug:
     var: r_lab_route
 
-- name: Remove peering for "{{r_ec2_vpc_peer.peering_id }}" route for lab VPC
-  ec2_vpc_route_table:
-    vpc_id:  "{{ ec2_lab_vpc_id }}"
-    region: "{{ ec2_region }}"
-    route_table_id: "{{ r_lab_route.route_tables.0.id }}"
-    routes:
-      - dest: "{{ item.value.dest  }}"
-        "": "{{r_ec2_vpc_peer.peering_id }}"
-    loop: "{{ r_lab_route.route_tables.0.routes }}"
-    when: 
+# - name: Remove peering for "{{r_ec2_vpc_peer.peering_id }}" route for lab VPC
+#   ec2_vpc_route_table:
+#     vpc_id:  "{{ ec2_lab_vpc_id }}"
+#     region: "{{ ec2_region }}"
+#     route_table_id: "{{ r_lab_route.route_tables.0.id }}"
+#     routes:
+#       - dest: "{{ item.value.dest  }}"
+#         "": "{{r_ec2_vpc_peer.peering_id }}"
+#     loop: "{{ r_lab_route.route_tables.0.routes }}" 
 
 # - name: Find route ID for lab VPC
 #   ec2_vpc_route_table_facts:
