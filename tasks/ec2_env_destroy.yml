@@ -85,10 +85,11 @@
     var: needed_routes
     verbosity: 4
 
-- name: Remove peering for "{{r_ec2_vpc_peer.peering_id }}" route for lab VPC
+- name: Remove peering for "{{ r_ec2_vpc_peer.peering_id }}" route for lab VPC
   ec2_vpc_route_table:
     vpc_id:  "{{ ec2_lab_vpc_id }}"
     region: "{{ ec2_region }}"
+    lookup: id
     route_table_id: "{{ r_lab_route.route_tables.0.id }}"
     routes: "{{ needed_routes }}"
       
