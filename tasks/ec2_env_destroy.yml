@@ -73,10 +73,10 @@
   register: r_lab_route
 
 - debug:
-    var: r_lab_route
+    var: r_lab_route.route_tables[0]
 
 - set_fact:
-    needed_routes: "{{ lookup('routes', r_lab_route.route_tables.0) }}"
+    needed_routes: "{{ lookup('routes', r_lab_route.route_tables[0]) }}"
 
 
 - debug:
