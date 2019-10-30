@@ -9,6 +9,7 @@
 
 - debug: 
     var: r_ec2_vpc_app
+    verbosity: 4
 
 - name: Get default SG for "{{ ec2_vpc }}"  VPC
   ec2_group_facts:
@@ -38,6 +39,8 @@
 
 - debug: 
     var: r_vpc_peers
+    verbosity: 4
+
 
 - name: Remove Peering
   ec2_vpc_peer:
@@ -55,6 +58,8 @@
 
 - debug:
     var: r_nat
+    verbosity: 4
+
 
 - name: Remove NAT gateway
   ec2_vpc_nat_gateway:
@@ -72,26 +77,22 @@
     region: "{{ ec2_region }}"
   register: r_lab_route
 
-- debug:
-    var: r_lab_route.route_tables[0].routes
-
-- set_fact:
+- name: Extract the routes that need to be kept
+  set_fact:
     needed_routes: "{{ lookup('routes', r_lab_route.route_tables[0].routes) }}"
-
 
 - debug:
     var: needed_routes
+    verbosity: 4
 
-
-# - name: Remove peering for "{{r_ec2_vpc_peer.peering_id }}" route for lab VPC
-#   ec2_vpc_route_table:
-#     vpc_id:  "{{ ec2_lab_vpc_id }}"
-#     region: "{{ ec2_region }}"
-#     route_table_id: "{{ r_lab_route.route_tables.0.id }}"
-#     routes:
-#       - dest: "{{ item.value.dest  }}"
-#         "": "{{r_ec2_vpc_peer.peering_id }}"
-#     loop: "{{ r_lab_route.route_tables.0.routes }}" 
+- name: Remove peering for "{{r_ec2_vpc_peer.peering_id }}" route for lab VPC
+  ec2_vpc_route_table:
+    vpc_id:  "{{ ec2_lab_vpc_id }}"
+    region: "{{ ec2_region }}"
+    route_table_id: "{{ r_lab_route.route_tables.0.id }}"
+    routes: "{{ needed_routes }}"
+      
+    loop: "{{ r_lab_route.route_tables.0.routes }}" 
 
 # - name: Find route ID for lab VPC
 #   ec2_vpc_route_table_facts:
