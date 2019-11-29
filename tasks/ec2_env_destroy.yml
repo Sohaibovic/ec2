@@ -92,7 +92,7 @@
     routes: "{{ needed_routes }}"
 
 - pause: 
-    seconds: 60
+    seconds: 90
    
 - name: Delete VPC "{{ ec2_vpc }}"
   ec2_vpc_net:
