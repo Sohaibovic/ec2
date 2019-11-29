@@ -21,6 +21,18 @@
       - Name: "{{ ec2_vpc }}_pub" 
   register: r_ec2_subnet_app_pub
 
+- name: Create a LB public subnet in "{{ ec2_vpc }}"
+  ec2_vpc_subnet:
+    vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
+    cidr: "{{ ec2_app_cidr_pub_lb }}"
+    region: "{{ ec2_region }}"
+    resource_tags:
+      Name: "{{ ec2_subnet_name }}_pub_lb"
+    state: present
+    tags: 
+      - Name: "{{ ec2_vpc }}_pub_lb" 
+  register: r_ec2_subnet_app_pub_lb
+
 - name: Create a private subnet in "{{ ec2_vpc }}"
   ec2_vpc_subnet:
     vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
@@ -176,8 +188,8 @@
     security_groups:
       - default
     subnets:
-      - "{{ ec2_subnet_name }}_pub"
-      - "{{ ec2_subnet_name }}_pub_lb"
+      - "{{ r_ec2_subnet_app_pub.subnet.id }}"
+      - "{{ r_ec2_subnet_app_pub_lb.subnet.id }}"
     listeners:
       - Protocol: HTTP 
         Port: 80 
