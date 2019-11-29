@@ -183,6 +183,10 @@
             TargetGroupName:  "{{ ec2_lb_target }}" 
     vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
     state: present
+    register: r_alb
+
+- debug:
+    var: r_alb 
 
 - name: Record needed facts from the newly provisioned infrastructure
   set_fact:
