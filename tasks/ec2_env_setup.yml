@@ -12,7 +12,7 @@
 - name: Create a public subnet in "{{ ec2_vpc }}"
   ec2_vpc_subnet:
     vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
-    az: "{{ r_ec2_vpc_app.vpc.id }}-1a"
+    az: "{{ ec2_region }}-1a"
     cidr: "{{ ec2_app_cidr_pub }}"
     region: "{{ ec2_region }}"
     resource_tags:
@@ -27,7 +27,7 @@
     vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
     cidr: "{{ ec2_app_cidr_pub_lb }}"
     region: "{{ ec2_region }}"
-    az: "{{ r_ec2_vpc_app.vpc.id }}-1b"
+    az: "{{ ec2_region }}-1b"
     resource_tags:
       Name: "{{ ec2_subnet_name }}_pub_lb"
     state: present
