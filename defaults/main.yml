@@ -24,8 +24,8 @@ ec2_app: "{{ customer }}_{{ ec2_env }}"
 ec2_vpc: "{{ customer }}_{{ ec2_env }}_vpc" 
 ec2_subnet_name: "{{ customer }}_{{ ec2_env }}" 
 
-
-ec2_lb_target: ec2_lb_target 
+ec2_lb_name: "{{ customer }}_{{ ec2_env }}_alb" 
+ec2_lb_target: "{{ customer }}_{{ ec2_env }}_target"  
 
 
 

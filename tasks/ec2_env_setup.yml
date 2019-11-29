@@ -158,6 +158,32 @@
       - dest: 10.0.0.0/16
         vpc_peering_connection_id: "{{ r_ec2_vpc_peer.peering_id }}"
 
+- name: Create Target Group
+  elb_target_group:
+    name: "{{ ec2_lb_target }}" 
+    protocol: http
+    port: 80
+    vpc_id:  "{{ r_ec2_vpc_app.vpc.id }}"
+    health_check_path: /
+    successful_response_codes: "200,250-260"
+    state: present
+
+- name: Create Load Balancer
+  elb_application_lb:
+    name: "{{ ec2_lb_name }}" 
+    security_groups:
+      - 
+    subnets:
+      - "{{ ec2_subnet_name }}_pub"
+    listeners:
+      - Protocol: HTTP 
+        Port: 80 
+        DefaultActions:
+          - Type: forward 
+            TargetGroupName:  "{{ ec2_lb_target }}" 
+    vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
+    state: present
+
 - name: Record needed facts from the newly provisioned infrastructure
   set_fact:
     cat_facts: 
