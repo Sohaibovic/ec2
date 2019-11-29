@@ -174,18 +174,18 @@
     name: "{{ ec2_lb_name }}" 
     region: "{{ ec2_region }}"
     security_groups:
-      - 
+      - default
     subnets:
       - "{{ ec2_subnet_name }}_pub"
+      - "{{ ec2_subnet_name }}_pub_lb"
     listeners:
       - Protocol: HTTP 
         Port: 80 
         DefaultActions:
           - Type: forward 
             TargetGroupName:  "{{ ec2_lb_target }}" 
-    vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
     state: present
-    register: r_alb
+  register: r_alb
 
 - debug:
     var: r_alb 
