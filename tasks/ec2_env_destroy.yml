@@ -90,7 +90,10 @@
     lookup: id
     route_table_id: "{{ r_lab_route.route_tables.0.id }}"
     routes: "{{ needed_routes }}"
-      
+
+- pause: 
+    seconds: 60
+   
 - name: Delete VPC "{{ ec2_vpc }}"
   ec2_vpc_net:
     name: "{{ ec2_vpc }}"
