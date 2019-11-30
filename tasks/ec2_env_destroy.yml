@@ -96,7 +96,8 @@
     name: "{{ ec2_lb_name }}" 
     region: "{{ ec2_region }}"
     state: absent
-    
+    wait: yes
+
 - name: Remove target group
   elb_target_group:
     name: "{{ ec2_lb_target }}" 
