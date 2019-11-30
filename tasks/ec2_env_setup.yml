@@ -213,6 +213,7 @@
     cat_facts: 
       ec2_vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
       ec2_subnet_id: "{{ r_ec2_subnet_app_prv.subnet.id }}"
+      lb_fqdn: "{{ r_alb.dns_name }}"
   delegate_to: fact_store
   delegate_facts: yes
   run_once: yes

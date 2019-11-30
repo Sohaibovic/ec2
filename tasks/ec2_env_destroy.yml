@@ -91,6 +91,19 @@
     route_table_id: "{{ r_lab_route.route_tables.0.id }}"
     routes: "{{ needed_routes }}"
 
+- name: Remove target group
+  elb_target_group:
+    name: "{{ ec2_lb_target }}" 
+    region: "{{ ec2_region }}"
+    vpc_id:  "{{ r_ec2_vpc_app.vpc.id }}"
+    state: absent
+ 
+- name: Remove LB
+  elb_application_lb:
+    name: "{{ ec2_lb_name }}" 
+    region: "{{ ec2_region }}"
+    state: absent
+
 - pause: 
     seconds: 90
    
