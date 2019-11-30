@@ -101,7 +101,7 @@
     region: "{{ ec2_region }}"
   register: r_app_default_sg
 
-- name: Add SSH from Ansible VPC to default SG for "{{ ec2_vpc }}"
+- name: Add HTTP from all & SSH from Ansible VPC to default SG for "{{ ec2_vpc }}"
   ec2_group:
     name: default
     region: "{{ ec2_region }}"
@@ -113,6 +113,10 @@
         from_port: 22
         to_port: 22
         group_id: "{{ lab_sg.owner_id }}/{{ lab_sg.group_id }}/{{ lab_sg.group_name }}"
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: 0.0.0.0/0
       - proto: all
         group_id: "{{ r_app_default_sg.security_groups.0.group_id }}"
 
@@ -188,7 +192,7 @@
     name: "{{ ec2_lb_name }}" 
     region: "{{ ec2_region }}"
     security_groups:
-      - default
+      -  "{{ r_app_default_sg.security_groups.0.group_id }}"
     subnets:
       - "{{ r_ec2_subnet_app_pub.subnet.id }}"
       - "{{ r_ec2_subnet_app_pub_lb.subnet.id }}"
