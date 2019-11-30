@@ -95,7 +95,6 @@
   elb_target_group:
     name: "{{ ec2_lb_target }}" 
     region: "{{ ec2_region }}"
-    vpc_id:  "{{ r_ec2_vpc_app.vpc.id }}"
     state: absent
  
 - name: Remove LB
