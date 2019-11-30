@@ -1,4 +1,11 @@
 ---
+- name: Get vpc details for "{{ ec2_vpc }}"
+  ec2_vpc_net_facts:
+    filters:
+      "tag:Name": "{{ ec2_vpc }}"
+    region: "{{ ec2_region }}"
+  register: r_ec2_vpc_app
+
 - name: Gather facts for instances with name {{ ec2_scope }}
   ec2_instance_facts:
     region:  "{{ ec2_region }}"
@@ -23,7 +30,7 @@
     name: "{{ ec2_lb_target }}"
     protocol: http
     port: "{{ ec2_lb_target_port }}"
-    vpc_id: "{{ ec2_vpc }}"
+    vpc_id: "{{ r_ec2_vpc_app.vpcs.0.id }}"
     region:  "{{ ec2_region }}"
     modify_targets: Yes
     state: present

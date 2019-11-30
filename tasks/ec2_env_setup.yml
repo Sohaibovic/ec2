@@ -205,9 +205,6 @@
     state: present
   register: r_alb
 
-- debug:
-    var: r_alb 
-
 - name: Record needed facts from the newly provisioned infrastructure
   set_fact:
     cat_facts: 
