@@ -114,8 +114,8 @@
         to_port: 22
         group_id: "{{ lab_sg.owner_id }}/{{ lab_sg.group_id }}/{{ lab_sg.group_name }}"
       - proto: tcp
-        from_port: 80
-        to_port: 80
+        from_port: "{{ ec2_lb_target_port }}"
+        to_port: "{{ ec2_lb_target_port }}"
         cidr_ip: 0.0.0.0/0
       - proto: all
         group_id: "{{ r_app_default_sg.security_groups.0.group_id }}"
@@ -181,7 +181,7 @@
     name: "{{ ec2_lb_target }}" 
     region: "{{ ec2_region }}"
     protocol: http
-    port: 80
+    port: "{{ ec2_lb_target_port }}"
     vpc_id:  "{{ r_ec2_vpc_app.vpc.id }}"
     health_check_path: /
     successful_response_codes: "200,250-260"
@@ -198,7 +198,7 @@
       - "{{ r_ec2_subnet_app_pub_lb.subnet.id }}"
     listeners:
       - Protocol: HTTP 
-        Port: 80 
+        Port: "{{ ec2_lb_target_port }}" 
         DefaultActions:
           - Type: forward 
             TargetGroupName:  "{{ ec2_lb_target }}" 
