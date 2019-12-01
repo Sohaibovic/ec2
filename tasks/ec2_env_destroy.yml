@@ -98,6 +98,8 @@
     state: absent
     wait: yes
 
+# - name: Wait for end of removal
+
 - name: Remove target group
   elb_target_group:
     name: "{{ ec2_lb_target }}" 
