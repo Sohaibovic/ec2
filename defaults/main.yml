@@ -27,6 +27,7 @@ ec2_subnet_name: "{{ customer }}_{{ ec2_env }}"
 
 ec2_lb_name: "{{ customer }}-{{ ec2_env }}-alb" 
 ec2_lb_target: "{{ customer }}-{{ ec2_env }}-target"  
+ec2_lb_target_port: 80
 
 
 
