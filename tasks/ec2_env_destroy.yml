@@ -98,6 +98,9 @@
     state: absent
     wait: yes
 
+- pause: 
+    seconds: 90
+
 # - name: Wait for end of removal
 
 - name: Remove target group
