@@ -50,7 +50,7 @@
   debug: 
     msg:
      - "* Provision Success"
-     - "* Reach Application at: {{ hostvars.fact_store.cat_facts.lb_fqdn }}"
+     - "* Reach Application at: {{ hostvars.fact_store.cat_facts.lb_fqdn }}:8080"
      # - "* Load Balancer IP: {{ hostvars.fact_store.cat_facts.lb_ip }}"   
     verbosity: 0
   run_once: yes
