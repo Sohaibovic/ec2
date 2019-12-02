@@ -110,7 +110,7 @@
     state: absent
 
 - pause: 
-    seconds: 90
+    seconds: 300
    
 - name: Delete VPC "{{ ec2_vpc }}"
   ec2_vpc_net:
