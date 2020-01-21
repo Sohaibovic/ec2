@@ -17,7 +17,7 @@
      state: absent
      region: "{{ ec2_region }}"
      wait: true
-     instance_ids: "{{ ids_to_remove | bool }}"
+     instance_ids: "{{ ids_to_remove }}"
   when: ids_to_remove
   # notify:
   #   - rhsm_unregister
