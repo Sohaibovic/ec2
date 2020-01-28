@@ -109,13 +109,13 @@
     region: "{{ ec2_region }}"
     state: absent
 
-- pause: 
-    seconds: 300
+# - pause: 
+#     seconds: 300
    
-- name: Delete VPC "{{ ec2_vpc }}"
-  ec2_vpc_net:
-    name: "{{ ec2_vpc }}"
-    region: "{{ ec2_region }}"
-    state: absent
-    cidr_block: "{{ ec2_app_cidr}}"
-    purge_cidrs: yes
+# - name: Delete VPC "{{ ec2_vpc }}"
+#   ec2_vpc_net:
+#     name: "{{ ec2_vpc }}"
+#     region: "{{ ec2_region }}"
+#     state: absent
+#     cidr_block: "{{ ec2_app_cidr}}"
+#     purge_cidrs: yes
