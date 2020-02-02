@@ -3,8 +3,8 @@ customer: "ml"
 ec2_env: "cat"
 scope: foo
 ec2_count: 2
-ec2_scope : "{{ scope }}"
-ec2_delete: "{{ scope }}"
+ec2_scope : "{{ customer }}"
+ec2_delete: "{{ customer }}"
 
 ec2_region: eu-west-1
 ec2_size: t2_micro

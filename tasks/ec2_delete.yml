@@ -3,7 +3,7 @@
   ec2_instance_facts:
       region: "{{ ec2_region }}"
       filters:
-        "tag:Name": "{{ ec2_delete }}"
+        "tag:Scope": "{{ ec2_delete }}"
   register: ec2
 
 - name: Build a list of EC2 ids to remove
