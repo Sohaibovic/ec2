@@ -18,12 +18,12 @@
   set_fact:
     ids_to_add: "{{ ids_to_add }}"
 
-- name: Build the list of instances ID and ports
-  vars:
-    ids_and_ports: []
-  set_fact:
-    ids_and_ports: "{{ ids_and_ports +  [ {'Id': item, 'Port': ec2_lb_target_port} ] }}"
-  with_items: "{{ ids_to_add }}"
+# - name: Build the list of instances ID and ports
+#   vars:
+#     ids_and_ports: []
+#   set_fact:
+#     ids_and_ports: "{{ ids_and_ports +  [ {'Id': item, 'Port': ec2_lb_target_port} ] }}"
+#   with_items: "{{ ids_to_add }}"
 
 # - name: Add Instances to the load balancer target {{ ec2_lb_target }}
 #   elb_target_group:
@@ -42,7 +42,7 @@
     target_group_name: "{{ ec2_lb_target }}"
     target_id: "{{ item }}"
     state: present
-  with_items: "{{ ids_and_ports }}"
+  with_items: "{{ ids_to_add }}"
 
 
 - name: Smoke Test for "{{ hostvars.fact_store.cat_facts.lb_fqdn }}"
