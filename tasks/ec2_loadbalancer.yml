@@ -25,17 +25,25 @@
     ids_and_ports: "{{ ids_and_ports +  [ {'Id': item, 'Port': ec2_lb_target_port} ] }}"
   with_items: "{{ ids_to_add }}"
 
+# - name: Add Instances to the load balancer target {{ ec2_lb_target }}
+#   elb_target_group:
+#     name: "{{ ec2_lb_target }}"
+#     protocol: http
+#     port: "{{ ec2_lb_target_port }}"
+#     vpc_id: "{{ r_ec2_vpc_app.vpcs.0.id }}"
+#     region:  "{{ ec2_region }}"
+#     modify_targets: yes
+#     state: present
+#     target_type: instance
+#     targets: "{{ ids_and_ports }}"
+
 - name: Add Instances to the load balancer target {{ ec2_lb_target }}
-  elb_target_group:
-    name: "{{ ec2_lb_target }}"
-    protocol: http
-    port: "{{ ec2_lb_target_port }}"
-    vpc_id: "{{ r_ec2_vpc_app.vpcs.0.id }}"
-    region:  "{{ ec2_region }}"
-    modify_targets: Yes
+  elb_target:
+    target_group_name: "{{ ec2_lb_target }}"
+    target_id: {{ item }}
     state: present
-    target_type: instance
-    targets: "{{ ids_and_ports }}"
+  with_items: "{{ ids_and_ports }}"
+
 
 - name: Smoke Test for "{{ hostvars.fact_store.cat_facts.lb_fqdn }}"
   uri: 
