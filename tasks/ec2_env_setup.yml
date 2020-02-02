@@ -156,7 +156,8 @@
     vpc_id:  "{{ r_ec2_vpc_app.vpc.id }}"
     region: "{{ ec2_region }}"
     route_table_id: "{{ r_app_route.route_tables.0.id }}"
-    purge_routes: no
+    # workaroung until check
+    purge_routes: yes
     lookup: id
     #tags:
     #  Name: "{{ ec2_vpc }}_pub" 
