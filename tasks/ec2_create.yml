@@ -22,7 +22,7 @@
     key_name: "{{ ec2_key_name }}"
     name: "{{ scope }}_{{ item }}"
     region: "{{ ec2_region }}"
-    image: "{{ ec2_ami }}"
+    image_id: "{{ ec2_ami }}"
     vpc_subnet_id: "{{ ec2_subnet_id }}"
     network:
       assign_public_ip: "{{ ec2_assign_public_ip }}"
