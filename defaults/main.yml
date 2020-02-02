@@ -19,7 +19,7 @@ ec2_assign_public_ip: false
 ec2_wait: no
 
 ec2_instance_tags:
-  Name: "{{ scope }}"
+  Customer: "{{ customer }}"
 
 ec2_app: "{{ customer }}_{{ ec2_env }}"  
 ec2_vpc: "{{ customer }}_{{ ec2_env }}_vpc" 
