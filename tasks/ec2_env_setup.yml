@@ -165,6 +165,7 @@
         gateway_id: "{{ r_igw.gateway_id }}"
   # Add route existence check
   ignore_errors: yes
+  when: r_igw.changed
 
 - name: Create route table for the private network of "{{ ec2_vpc }}" VPC with NAT and Peering
   ec2_vpc_route_table:
