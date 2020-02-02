@@ -16,7 +16,7 @@ ec2_app_cidr_prv: "172.2.0.192/26"
 ec2_lab_vpc_id: vpc-0dfbc7ccf09d77192
 ec2_key_name: dcl-demo 
 ec2_assign_public_ip: false
-ec2_wait: true
+ec2_wait: no
 
 ec2_instance_tags:
   Name: "{{ scope }}"
