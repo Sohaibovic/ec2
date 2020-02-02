@@ -40,7 +40,7 @@
 - name: Add Instances to the load balancer target {{ ec2_lb_target }}
   elb_target:
     target_group_name: "{{ ec2_lb_target }}"
-    target_id: {{ item }}
+    target_id: "{{ item }}"
     state: present
   with_items: "{{ ids_and_ports }}"
 
