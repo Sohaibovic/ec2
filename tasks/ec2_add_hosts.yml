@@ -14,7 +14,7 @@
     ips_to_add: "{{ ec2.instances | map(attribute='public_ip_address') | list }}"
   when: ec2_assign_public_ip
 
-- name: Create list of tags
+- name: Create an empty list of tags
   set_fact:
     tags: []
 
