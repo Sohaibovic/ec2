@@ -30,6 +30,6 @@
     instance_type: "{{ ec2_size }}"
     wait: "{{ ec2_wait }}"
     state: present
-  with_sequence: count="{{eap_ec2_count}}" 
+  with_sequence: count="{{ec2_count}}" 
 
     
