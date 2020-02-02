@@ -147,6 +147,10 @@
     region: "{{ ec2_region }}"
   register: r_app_route
 
+- debug: 
+    var: r_app_route
+    verbosity: 2
+
 - name: Update default route table for app in "{{ ec2_vpc }}" VPC for igw
   ec2_vpc_route_table:
     vpc_id:  "{{ r_ec2_vpc_app.vpc.id }}"
@@ -154,8 +158,8 @@
     route_table_id: "{{ r_app_route.route_tables.0.id }}"
     purge_routes: no
     lookup: id
-    tags:
-      Name: "{{ ec2_vpc }}_pub" 
+    #tags:
+    #  Name: "{{ ec2_vpc }}_pub" 
     routes:
       - dest: 0.0.0.0/0
         gateway_id: "{{ r_igw.gateway_id }}"
@@ -166,8 +170,8 @@
   ec2_vpc_route_table:
     vpc_id: "{{ r_ec2_vpc_app.vpc.id }}"
     region: "{{ ec2_region }}"
-    tags:
-      Name: "{{ ec2_vpc }}_prv" 
+    #tags:
+    #  Name: "{{ ec2_vpc }}_prv" 
     subnets:
       - "{{ r_ec2_subnet_app_prv.subnet.id }}" 
     routes:
