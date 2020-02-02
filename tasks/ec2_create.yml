@@ -3,16 +3,32 @@
   set_fact:
     ec2_subnet_id: "{{ hostvars.fact_store.cat_facts.ec2_subnet_id }}"
 
-- name: Provision a set of EC2 instances with tag_Name {{ ec2_scope }}
-  ec2:
-     key_name: "{{ ec2_key_name }}"
-     state: present
-     region: "{{ ec2_region }}"
-     instance_type: "{{ ec2_size }}"
-     image: "{{ ec2_ami }}"
-     vpc_subnet_id: "{{ ec2_subnet_id }}"
-     assign_public_ip: "{{ ec2_assign_public_ip }}"
-     wait: "{{ ec2_wait }}"
-     count: "{{ ec2_count }}"
-     instance_tags: "{{ ec2_instance_tags }}"
+# - name: Provision a set of EC2 instances with tag_Name {{ ec2_scope }}
+#   ec2:
+#      key_name: "{{ ec2_key_name }}"
+#      state: present
+#      region: "{{ ec2_region }}"
+#      instance_type: "{{ ec2_size }}"
+#      image: "{{ ec2_ami }}"
+#      vpc_subnet_id: "{{ ec2_subnet_id }}"
+#      assign_public_ip: "{{ ec2_assign_public_ip }}"
+#      wait: "{{ ec2_wait }}"
+#      count: "{{ ec2_count }}"
+#      instance_tags: "{{ ec2_instance_tags }}"
      # group_id: "{{ ec2_groupid }}"
+
+- name: Provision a set of EC2 instances with tag_Name {{ ec2_scope }}
+  ec2_instance:
+    key_name: "{{ ec2_key_name }}"
+    name: "{{ scope }}_{{ item }}"
+    region: "{{ ec2_region }}"
+    image: "{{ ec2_ami }}"
+    vpc_subnet_id: "{{ ec2_subnet_id }}"
+    assign_public_ip: "{{ ec2_assign_public_ip }}"
+    tags: "{{ ec2_instance_tags }}"
+    instance_type: "{{ ec2_size }}"
+    wait: "{{ ec2_wait }}"
+    state: present
+  with_sequence: count="{{ec2_count}}" 
+
+    
