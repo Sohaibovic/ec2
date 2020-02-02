@@ -24,7 +24,8 @@
     region: "{{ ec2_region }}"
     image: "{{ ec2_ami }}"
     vpc_subnet_id: "{{ ec2_subnet_id }}"
-    assign_public_ip: "{{ ec2_assign_public_ip }}"
+    network:
+      assign_public_ip: "{{ ec2_assign_public_ip }}"
     tags: "{{ ec2_instance_tags }}"
     instance_type: "{{ ec2_size }}"
     wait: "{{ ec2_wait }}"
