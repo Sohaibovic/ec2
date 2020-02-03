@@ -20,7 +20,7 @@
 - name: Provision a set of EC2 instances
   ec2_instance:
     key_name: "{{ ec2_key_name }}"
-    name: "{{ scope }}_{{ item }}"
+    name: "{{ ec2_instance_tags.Role }}_{{ item }}"
     region: "{{ ec2_region }}"
     image_id: "{{ ec2_ami }}"
     vpc_subnet_id: "{{ ec2_subnet_id }}"
