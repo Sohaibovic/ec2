@@ -41,7 +41,7 @@
   elb_target_group:
     name: "{{ ec2_lb_target }}" 
     region: "{{ ec2_region }}"
-    vpc_id:  "{{ r_ec2_vpc_app.vpc.id }}"
+    vpc_id:  "{{ r_ec2_vpc_app.vpcs.0.id }}"
     state: absent
 
 - name: Create Target Group
@@ -50,7 +50,7 @@
     region: "{{ ec2_region }}"
     protocol: http
     port: "{{ ec2_lb_target_port }}"
-    vpc_id:  "{{ r_ec2_vpc_app.vpc.id }}"
+    vpc_id:  "{{ r_ec2_vpc_app.vpcs.0.id }}"
     health_check_path: /
     successful_response_codes: "200,250-260"
     state: present
