@@ -37,6 +37,24 @@
 #     target_type: instance
 #     targets: "{{ ids_and_ports }}"
 
+- name: Remove Target Group
+  elb_target_group:
+    name: "{{ ec2_lb_target }}" 
+    region: "{{ ec2_region }}"
+    vpc_id:  "{{ r_ec2_vpc_app.vpc.id }}"
+    state: absent
+
+- name: Create Target Group
+  elb_target_group:
+    name: "{{ ec2_lb_target }}" 
+    region: "{{ ec2_region }}"
+    protocol: http
+    port: "{{ ec2_lb_target_port }}"
+    vpc_id:  "{{ r_ec2_vpc_app.vpc.id }}"
+    health_check_path: /
+    successful_response_codes: "200,250-260"
+    state: present
+
 - name: Add Instances to the load balancer target {{ ec2_lb_target }}
   elb_target:
     target_group_name: "{{ ec2_lb_target }}"
@@ -45,7 +63,6 @@
     target_status: healthy
     state: present
   with_items: "{{ ids_to_add }}"
-
 
 - name: Smoke Test for "{{ hostvars.fact_store.cat_facts.lb_fqdn }}"
   uri: 
