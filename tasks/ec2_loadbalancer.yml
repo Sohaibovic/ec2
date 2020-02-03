@@ -41,6 +41,7 @@
   elb_target:
     target_group_name: "{{ ec2_lb_target }}"
     target_id: "{{ item }}"
+    region:  "{{ ec2_region }}"
     state: present
   with_items: "{{ ids_to_add }}"
 
